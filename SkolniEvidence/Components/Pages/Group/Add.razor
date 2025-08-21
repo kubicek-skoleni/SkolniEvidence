@@ -1,0 +1,32 @@
+﻿@page "/group/add"
+
+@using SkolniEvidence.Model
+
+<h3>Nová třída</h3>
+
+<EditForm Model="trida" OnSubmit="Save">
+    <div>
+        <label>
+            Třída (name):
+            <InputText @bind-Value="trida.Name" />
+        </label>
+    </div>
+    <div>
+        <label>
+            Popis:
+            <InputText @bind-Value="trida.Description" />
+        </label>
+    </div>
+    <div>
+        <button type="submit">Ulož</button>
+    </div>
+</EditForm>
+
+@code {
+    Group trida = new();
+
+    void Save()
+    {
+		Console.WriteLine($"Saving class: {trida.Name}, Description: {trida.Description}");
+    }
+}
