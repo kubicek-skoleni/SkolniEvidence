@@ -1,5 +1,9 @@
-﻿namespace SkolniEvidence.Model
+﻿using System;
+using Microsoft.EntityFrameworkCore;
+
+namespace SkolniEvidence.Model
 {
+    [Index(nameof(Name), IsUnique = true)]
     public class Group
     {
         public int Id { get; set; }

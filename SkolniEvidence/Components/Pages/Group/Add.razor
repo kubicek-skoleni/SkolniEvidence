@@ -1,24 +1,28 @@
 ﻿@page "/group/add"
 
+@using SkolniEvidence.Data
 @using SkolniEvidence.Model
+
+@inject ApplicationDbContext context
+@inject NavigationManager nav
 
 <h3>Nová třída</h3>
 
 <EditForm Model="trida" OnSubmit="Save">
-    <div>
-        <label>
+    <div class="mb-3">
+        <label class="form-label">
             Třída (name):
-            <InputText @bind-Value="trida.Name" />
+            <InputText @bind-Value="trida.Name" class="form-control" />
         </label>
     </div>
-    <div>
-        <label>
+    <div class="mb-3">
+        <label class="form-label">
             Popis:
-            <InputText @bind-Value="trida.Description" />
+            <InputText @bind-Value="trida.Description" class="form-control" />
         </label>
     </div>
     <div>
-        <button type="submit">Ulož</button>
+        <button type="submit" class="btn btn-primary">Ulož</button>
     </div>
 </EditForm>
 
@@ -27,6 +31,20 @@
 
     void Save()
     {
-		Console.WriteLine($"Saving class: {trida.Name}, Description: {trida.Description}");
+        Console.WriteLine($"Saving class: {trida.Name}, Description: {trida.Description}");
+
+        try
+        {
+            context.Groups.Add(trida);
+            context.SaveChanges();
+
+            nav.NavigateTo("/");
+
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error saving class: {ex.Message}");
+            // Handle the error appropriately, e.g., show a message to the user
+		}
     }
 }

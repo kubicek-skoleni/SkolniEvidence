@@ -1,6 +1,26 @@
 ﻿@page "/"
+@inject ApplicationDbContext context
+
 
 <PageTitle>Skolni Evidence</PageTitle>
 
 <h1>Skolni evidence</h1>
 
+<h2>Seznam tříd</h2>
+
+@foreach(var group in groups)
+{
+	<div>@group.Name - @group.Description</div>
+}
+
+
+@code{
+	List<Model.Group> groups = new ();
+
+	protected override void OnInitialized()
+	{
+		groups = context.Groups
+					.OrderByDescending(trida => trida.Name)
+					.ToList();
+	}
+}
