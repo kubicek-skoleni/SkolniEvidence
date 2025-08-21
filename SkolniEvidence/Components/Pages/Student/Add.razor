@@ -1,0 +1,59 @@
+﻿@page "/student/add/{id:int}"
+
+@inject ApplicationDbContext context
+
+<h3>Nový student</h3>
+
+<EditForm Model="student" OnSubmit="Save">
+    <div class="mb-3">
+        <label class="form-label">
+            Jméno:
+            <InputText @bind-Value="student.FirstName" class="form-control" />
+        </label>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">
+            Příjmení:
+            <InputText @bind-Value="student.LastName" class="form-control" />
+        </label>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">
+            Pohlaví:
+            <InputCheckbox @bind-Value="student.Male" class="form-control" />
+        </label>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">
+            Datum narození:
+            <InputDate @bind-Value="student.BirthDate" class="form-control" />
+        </label>
+    </div>
+
+    <div>
+        <button type="submit" class="btn btn-primary">Ulož</button>
+    </div>
+</EditForm>
+
+@code {
+
+    [Parameter]
+    public int id { get; set; }
+
+    public Student student { get; set; } = new Student();
+
+    public Group trida { get; set; } = new Group();
+
+
+    protected override void OnInitialized()
+    {
+        trida = 
+    }
+
+    void Save()
+    {
+        
+    }
+}
