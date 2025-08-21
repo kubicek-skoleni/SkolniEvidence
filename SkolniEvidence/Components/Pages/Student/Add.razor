@@ -1,6 +1,7 @@
 ﻿@page "/student/add/{id:int}"
 
 @inject ApplicationDbContext context
+@inject NavigationManager nav
 
 <h3>Nový student</h3>
 
@@ -42,18 +43,28 @@
     [Parameter]
     public int id { get; set; }
 
-    public Student student { get; set; } = new Student();
-
-    public Group trida { get; set; } = new Group();
-
+    Student student = new Student();
+    Group trida = new Group();
 
     protected override void OnInitialized()
     {
-        trida = 
+        trida = context
+                    .Groups
+                    .Where(trida => trida.Id == id)
+                    .First();
     }
 
     void Save()
     {
-        
+        try
+        {
+            trida.Students.Add(student);
+            context.SaveChanges();
+            nav.NavigateTo("/");
+
+        }catch(Exception ex)
+        {
+            Console.WriteLine(ex);
+        }
     }
 }
