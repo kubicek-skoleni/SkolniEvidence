@@ -1,5 +1,7 @@
 ﻿@page "/group/add"
 
+@attribute [Authorize(Roles="admin")]
+
 @using SkolniEvidence.Data
 @using SkolniEvidence.Model
 

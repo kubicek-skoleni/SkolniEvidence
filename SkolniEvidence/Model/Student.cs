@@ -9,7 +9,7 @@ namespace SkolniEvidence.Model
         //[Key]
         //public Guid PrimaryKey { get; set; }
 
-        [MaxLength(100)]
+        [MaxLength(100, ErrorMessage = "Moc dlouhé jméno")]
         public string FirstName { get; set; } = string.Empty;
 
         [MaxLength(100)]

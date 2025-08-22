@@ -1,0 +1,37 @@
+﻿@page "/students"
+@using Microsoft.EntityFrameworkCore
+@using Microsoft.AspNetCore.Components.QuickGrid
+@using SkolniEvidence.Model
+@using SkolniEvidence.Data
+@inject ApplicationDbContext context
+
+<PageTitle>Index</PageTitle>
+
+<h1>Index</h1>
+
+<p>
+    <a href="students/create">Create New</a>
+</p>
+
+<QuickGrid Class="table" Items="context.Students">
+    <PropertyColumn Property="student => student.FirstName" />
+    <PropertyColumn Property="student => student.LastName" />
+    <PropertyColumn Property="student => student.Male" />
+    <PropertyColumn Property="student => student.BirthDate" />
+
+    <TemplateColumn Context="student">
+        <a href="@($"students/edit?id={student.Id}")">Edit</a> |
+        <a href="@($"students/details?id={student.Id}")">Details</a> |
+        <a href="@($"students/delete?id={student.Id}")">Delete</a>
+    </TemplateColumn>
+</QuickGrid>
+
+@code {
+   
+
+    protected override void OnInitialized()
+    {
+       
+    }
+
+}
