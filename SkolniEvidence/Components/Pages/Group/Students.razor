@@ -1,0 +1,22 @@
+﻿@page "/group/{id:int}/students"
+@inject ApplicationDbContext context
+
+<h3>Studenti pro třídu</h3>
+
+<StudentsTable Students="filteredstudents" />
+
+@code {
+
+	[Parameter]
+	public int id { get; set; }
+
+	public List<Student> filteredstudents = new ();
+
+	override protected void OnInitialized()
+	{
+		filteredstudents = context.Students
+						.Include(x => x.Group)
+						.Where(x => x.Group.Id == id)
+						.ToList();
+	}
+}

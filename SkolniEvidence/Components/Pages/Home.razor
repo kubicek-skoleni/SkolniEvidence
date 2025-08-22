@@ -13,7 +13,7 @@
 
 @foreach(var group in groups)
 {
-	<div>@group.Name - @group.Description - @group.Students.Count() - <a href="/student/add/@group.Id">Nový student</a></div>
+	<div>@group.Name - @group.Description - <a href="/group/@group.Id/students">@group.Students.Count()</a> - <a href="/student/add/@group.Id">Nový student</a></div>
 }
 
 

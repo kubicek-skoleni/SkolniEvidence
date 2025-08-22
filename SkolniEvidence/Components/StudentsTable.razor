@@ -1,0 +1,29 @@
+﻿<table class="table">
+    <thead>
+        <tr>
+            <th>Jméno</th>
+            <th>Příjmení</th>
+            <th>Pohlaví</th>
+            <th>Datum narození</th>
+			<th>Třída</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var student in Students)
+        {
+            <tr>
+                <td>@student.FirstName</td>
+                <td>@student.LastName</td>
+                <td>@(student.Male ? "muž" : "žena")</td>
+				<td>@student.BirthDate.ToString("dd. MM. yyyy")</td>
+                <td>@student.Group.Name</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@code {
+
+	[Parameter]
+	public List<Model.Student> Students { get; set; } = new();
+}
