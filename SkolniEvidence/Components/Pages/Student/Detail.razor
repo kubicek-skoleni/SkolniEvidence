@@ -4,68 +4,75 @@
 
 <h3>Student</h3>
 
-<dl class="row">
-    <dt class="col-sm-3">Jméno</dt>
-    <dd class="col-sm-9">@student.FirstName</dd>
-    <dt class="col-sm-3">Přijmení</dt>
-    <dd class="col-sm-9">@student.LastName</dd>
-    <dt class="col-sm-3">Pohlaví</dt>
-    <dd class="col-sm-9">@(student.Male ? "muž" : "žena")</dd>
-    <dt class="col-sm-3">Dat. narození</dt>
-    <dd class="col-sm-9">@student.BirthDate.ToString("dd. MM. yyyy")</dd>
-    <dt class="col-sm-3">Třída</dt>
-    <dd class="col-sm-9">@student.Group.Name</dd>
-</dl>
-
-@if(!string.IsNullOrEmpty(student.ProfilePhoto))
+@if (student == null)
 {
-    <img width="200" src="/ProfilePictures/@student.ProfilePhoto" />
+	<div>STUDENT NENALEZEN</div>
 }
 else
 {
-    <InputFile OnChange="LoadFile" 
-        accept="image/*" class="form-control" />
-}
+	<dl class="row">
+		<dt class="col-sm-3">Jméno</dt>
+		<dd class="col-sm-9">@student.FirstName</dd>
+		<dt class="col-sm-3">Přijmení</dt>
+		<dd class="col-sm-9">@student.LastName</dd>
+		<dt class="col-sm-3">Pohlaví</dt>
+		<dd class="col-sm-9">@(student.Male ? "muž" : "žena")</dd>
+		<dt class="col-sm-3">Dat. narození</dt>
+		<dd class="col-sm-9">@student.BirthDate.ToString("dd. MM. yyyy")</dd>
+		<dt class="col-sm-3">Třída</dt>
+		<dd class="col-sm-9">@student.Group.Name</dd>
+	</dl>
 
+	@if (!string.IsNullOrEmpty(student.ProfilePhoto))
+	{
+		<img width="200" src="/ProfilePictures/@student.ProfilePhoto" />
+	}
+	else
+	{
+		<InputFile OnChange="LoadFile"
+				   accept="image/*" class="form-control" />
+	}
+}
 @code {
 
-    Student? student = new Student();
+	Student? student = new Student();
 
-    [Parameter]
-    public int id { get; set; }
+	[Parameter]
+	public int id { get; set; }
 
-    protected override void OnInitialized()
-    {
-        student = context.Students
-                .Include(st => st.Group)
-                .Where(stud => stud.Id == id)
-                .FirstOrDefault();
-    }
+	protected override void OnInitialized()
+	{
+		student = context.Students
+				.Include(st => st.Group)
+				.Where(stud => stud.Id == id)
+				.FirstOrDefault();
+	}
 
-    async void LoadFile(InputFileChangeEventArgs e)
-    {
+	async void LoadFile(InputFileChangeEventArgs e)
+	{
 		const long maxAllowedSize = 10 * 1024 * 1024; // 10 MB
-        var file = e.File;
-        var extension = Path.GetExtension(file.Name);
-        var fileName = $"{Guid.NewGuid()}{extension}";
-        var folderPath = Path.Combine(env.WebRootPath, 
-                                        "ProfilePictures");
+		var file = e.File;
+		var extension = Path.GetExtension(file.Name);
+		var fileName = $"{Guid.NewGuid()}{extension}";
+		var folderPath = Path.Combine(env.WebRootPath,
+										"ProfilePictures");
 
-        var filePath = Path.Combine(folderPath, fileName);
+		var filePath = Path.Combine(folderPath, fileName);
 
-        try
-        {
-            await using var fs = new FileStream(filePath,
-                                            FileMode.Create);
-            await file.OpenReadStream(maxAllowedSize).CopyToAsync(fs);
-            fs.Close();
-        } catch(Exception ex)
-        {
-            Console.WriteLine(ex.Message);
+		try
+		{
+			await using var fs = new FileStream(filePath,
+											FileMode.Create);
+			await file.OpenReadStream(maxAllowedSize).CopyToAsync(fs);
+			fs.Close();
+		}
+		catch (Exception ex)
+		{
+			Console.WriteLine(ex.Message);
 		}
 
-        student.ProfilePhoto = fileName;
-        await context.SaveChangesAsync();
-        StateHasChanged();
-    }
+		student.ProfilePhoto = fileName;
+		await context.SaveChangesAsync();
+		StateHasChanged();
+	}
 }
