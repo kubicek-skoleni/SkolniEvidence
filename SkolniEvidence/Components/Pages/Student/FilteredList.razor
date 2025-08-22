@@ -3,15 +3,34 @@
 
 <h3>Studenti</h3>
 
+<form class="d-flex" role="search">
+	<InputText @bind-Value="search_term" class="form-control me-2" type="search" placeholder="hledej dle jména nebo třídy" aria-label="Hledej" />
+	<button @onclick="filter" class="btn btn-outline-success" type="button">Hledej</button>
+</form>
+
 <StudentsTable Students="filtered_students" />
 
 @code {
-	List<Student> filtered_students = new();
+	public List<Student> filtered_students { get; set; } = new();
+
+	string search_term = string.Empty;
 
 	override protected void OnInitialized()
 	{
 		filtered_students = context.Students
 						.Include(stud => stud.Group)
 						.ToList();
+	}
+
+	void filter()
+	{
+		filtered_students = context.Students
+						.Include(stud => stud.Group)
+						.Where(stud => stud.FirstName.Contains(search_term) 
+								|| stud.LastName.Contains(search_term) 
+								|| stud.Group.Name.Contains(search_term))
+						.ToList();
+
+		search_term = "";
 	}
 }
