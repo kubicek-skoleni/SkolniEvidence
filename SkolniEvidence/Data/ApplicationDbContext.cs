@@ -9,5 +9,7 @@ namespace SkolniEvidence.Data
         public DbSet<Student> Students { get; set; }
 
         public DbSet<Group> Groups { get; set; }
+
+        public DbSet<Address> Addresses { get; set; }
     }
 }

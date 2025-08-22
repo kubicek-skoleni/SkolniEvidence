@@ -1,6 +1,18 @@
 ﻿@page "/student/detail/{id:int}"
+@page "/students/detail/{id:int}"
+@* @page "/student/detail" *@
+
 @inject ApplicationDbContext context
 @inject IWebHostEnvironment env
+
+<style type="text/css">
+	img {
+		margin-top: 20px;
+		border: 1px solid #ddd;
+		border-radius: 4px;
+		padding: 5px;
+	}
+</style>
 
 <h3>Student</h3>
 

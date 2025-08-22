@@ -25,6 +25,8 @@ namespace SkolniEvidence.Model
         public string? ProfilePhoto { get; set; } = string.Empty;
 
         [Required]
-        public Group Group { get; set; }
+        public Group Group { get; set; } = new Group();
+
+        public Address? Address { get; set; } = new Address();
     }
 }
