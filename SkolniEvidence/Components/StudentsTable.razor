@@ -17,6 +17,7 @@
                 <td>@(student.Male ? "muž" : "žena")</td>
 				<td>@student.BirthDate.ToString("dd. MM. yyyy")</td>
                 <td>@student.Group.Name</td>
+                <td><a href="/student/detail/@student.Id">Detail</a></td>
             </tr>
         }
     </tbody>

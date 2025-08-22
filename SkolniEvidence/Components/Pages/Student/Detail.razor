@@ -1,0 +1,64 @@
+﻿@page "/student/detail/{id:int}"
+@inject ApplicationDbContext context
+@inject IWebHostEnvironment env
+@inject NavigationManager navigation
+
+<h3>Student</h3>
+
+<dl class="row">
+    <dt class="col-sm-3">Jméno</dt>
+    <dd class="col-sm-9">@student.FirstName</dd>
+    <dt class="col-sm-3">Přijmení</dt>
+    <dd class="col-sm-9">@student.LastName</dd>
+    <dt class="col-sm-3">Pohlaví</dt>
+    <dd class="col-sm-9">@(student.Male ? "muž" : "žena")</dd>
+    <dt class="col-sm-3">Dat. narození</dt>
+    <dd class="col-sm-9">@student.BirthDate.ToString("dd. MM. yyyy")</dd>
+    <dt class="col-sm-3">Třída</dt>
+    <dd class="col-sm-9">@student.Group.Name</dd>
+</dl>
+
+@if(!string.IsNullOrEmpty(student.ProfilePhoto))
+{
+    <img src="/ProfilePictures/@student.ProfilePhoto" />
+}
+else
+{
+    <InputFile OnChange="LoadFile" 
+        accept="image/*" class="form-control" />
+}
+
+@code {
+
+    Student? student = new Student();
+
+    [Parameter]
+    public int id { get; set; }
+
+    protected override void OnInitialized()
+    {
+        student = context.Students
+                .Include(st => st.Group)
+                .Where(stud => stud.Id == id)
+                .FirstOrDefault();
+    }
+
+    async void LoadFile(InputFileChangeEventArgs e)
+    {
+        var file = e.File;
+        var extension = Path.GetExtension(file.Name);
+        var fileName = $"{Guid.NewGuid()}{extension}";
+        var folderPath = Path.Combine(env.WebRootPath, "ProfilePictures");
+
+        var filePath = Path.Combine(folderPath, fileName);
+
+        await using var fs = new FileStream(filePath, FileMode.Create);
+        await file.OpenReadStream().CopyToAsync(fs);
+		fs.Flush();
+        fs.Close();
+
+        student.ProfilePhoto = fileName;
+        await context.SaveChangesAsync();
+        StateHasChanged();
+    }
+}
