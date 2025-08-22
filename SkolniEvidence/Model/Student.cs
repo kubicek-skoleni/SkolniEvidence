@@ -19,6 +19,11 @@ namespace SkolniEvidence.Model
 
         public DateOnly BirthDate { get; set; }
 
+        /// <summary>
+        /// Název souboru s profilovou fotkou
+        /// </summary>
+        public string? ProfilePhoto { get; set; } = string.Empty;
+
         [Required]
         public Group Group { get; set; }
     }

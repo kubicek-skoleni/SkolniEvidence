@@ -14,10 +14,10 @@
 </p>
 
 <QuickGrid Class="table" Items="context.Students">
-    <PropertyColumn Property="student => student.FirstName" />
-    <PropertyColumn Property="student => student.LastName" />
+    <PropertyColumn Property="student => student.FirstName" Sortable="true" />
+    <PropertyColumn Property="student => student.LastName" Sortable="true" />
     <PropertyColumn Property="student => student.Male" />
-    <PropertyColumn Property="student => student.BirthDate" />
+    <PropertyColumn Property="student => student.BirthDate" Sortable="true" />
 
     <TemplateColumn Context="student">
         <a href="@($"students/edit?id={student.Id}")">Edit</a> |
