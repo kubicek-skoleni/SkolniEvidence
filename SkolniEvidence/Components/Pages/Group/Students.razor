@@ -15,8 +15,8 @@
 	override protected void OnInitialized()
 	{
 		filteredstudents = context.Students
-						.Include(x => x.Group)
-						.Where(x => x.Group.Id == id)
+						.Include(stud => stud.Group)
+						.Where(stud => stud.Group.Id == id)
 						.ToList();
 	}
 }

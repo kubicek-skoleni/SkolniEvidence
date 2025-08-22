@@ -1,0 +1,17 @@
+﻿@page "/student/list"
+@inject ApplicationDbContext context
+
+<h3>Studenti</h3>
+
+<StudentsTable Students="filtered_students" />
+
+@code {
+	List<Student> filtered_students = new();
+
+	override protected void OnInitialized()
+	{
+		filtered_students = context.Students
+						.Include(stud => stud.Group)
+						.ToList();
+	}
+}
