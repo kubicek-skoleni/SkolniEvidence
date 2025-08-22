@@ -1,7 +1,6 @@
 ﻿@page "/student/detail/{id:int}"
 @inject ApplicationDbContext context
 @inject IWebHostEnvironment env
-@inject NavigationManager navigation
 
 <h3>Student</h3>
 
@@ -20,7 +19,7 @@
 
 @if(!string.IsNullOrEmpty(student.ProfilePhoto))
 {
-    <img src="/ProfilePictures/@student.ProfilePhoto" />
+    <img width="200" src="/ProfilePictures/@student.ProfilePhoto" />
 }
 else
 {
@@ -45,17 +44,25 @@ else
 
     async void LoadFile(InputFileChangeEventArgs e)
     {
+		const long maxAllowedSize = 10 * 1024 * 1024; // 10 MB
         var file = e.File;
         var extension = Path.GetExtension(file.Name);
         var fileName = $"{Guid.NewGuid()}{extension}";
-        var folderPath = Path.Combine(env.WebRootPath, "ProfilePictures");
+        var folderPath = Path.Combine(env.WebRootPath, 
+                                        "ProfilePictures");
 
         var filePath = Path.Combine(folderPath, fileName);
 
-        await using var fs = new FileStream(filePath, FileMode.Create);
-        await file.OpenReadStream().CopyToAsync(fs);
-		fs.Flush();
-        fs.Close();
+        try
+        {
+            await using var fs = new FileStream(filePath,
+                                            FileMode.Create);
+            await file.OpenReadStream(maxAllowedSize).CopyToAsync(fs);
+            fs.Close();
+        } catch(Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+		}
 
         student.ProfilePhoto = fileName;
         await context.SaveChangesAsync();
